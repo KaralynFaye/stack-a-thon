@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Animated } from 'react-native';
-import {API_KEY} from './secrets'
+import { StyleSheet, Text, View, Animated, Linking } from 'react-native';
+import {Dark_sky_key} from './secrets'
 import Weather from './components/BasicWeather'
 
 export default class App extends React.Component {
@@ -8,12 +8,15 @@ export default class App extends React.Component {
     isLoading: true,
     temperature: 0,
     weatherCondition: null,
+    title: '',
+    hourly:[],
     error:null
   }
 
   componentDidMount(){
     navigator.geolocation.getCurrentPosition(
       position => {
+        console.log(position.coords)
         this.fetchWeather(position.coords.latitude, position.coords.longitude)
       },
       error => {
@@ -24,22 +27,24 @@ export default class App extends React.Component {
       })
   }
 
-  async fetchWeather(lat = 25, lon=25) {
+  async fetchWeather(lat, lon) {
     fetch(
-          `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${API_KEY}&units=imperial`) .then (res => res.json()). then(json => {
+          `https://api.darksky.net/forecast/${Dark_sky_key}/${lat},${lon}?exclude=minutely,daily,alerts,flags`) .then (res => res.json()). then(json => {
             this.setState({
-              temperature: json.main.temp,
-              weatherCondition: json.weather[0].main,
+              temperature: json.currently.apparentTemperature,
+              weatherCondition: json.currently.icon,
+              hourly:json.hourly.data,
+              title:json.currently.summary,
               isLoading: false
             })
           })
   }
 render() {
-    const { isLoading, weatherCondition, temperature } = this.state;
+    const { isLoading, weatherCondition, temperature, title } = this.state;
     return (
       <View style={styles.container}>
-        {isLoading ? <Text> Data is Loading </Text> : (
-            <Weather weather={weatherCondition} temperature={temperature} />
+        {isLoading ? <Text style={styles.loading}> Data is Loading </Text> : (
+            <Weather weather='rain' temperature={temperature} title = {title} />
         )}
       </View>
     );
@@ -51,4 +56,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  loading: {
+    flex:1,
+    justifyContent:'center'
+  }
 });

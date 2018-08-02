@@ -4,17 +4,18 @@ import {MaterialCommunityIcons} from '@expo/vector-icons' ;
 import PropTypes from 'prop-types';
 import { weatherConditions } from '../stylings/weatherConditions'
 
-const Weather = ({weather, temperature}) => {
+const Weather = ({weather, temperature, title}) => {
   return (
-          <View style = {[styles.weatherContainer, {backgroundColor: weatherConditions[weather].color}]}>
+          <View style = {[styles.weatherContainer], {backgroundColor:weatherConditions[weather].color}}>
+            <Text style = {styles.headerContainer}>{weather}{temperature}</Text>
             <View style = {styles.headerContainer} >
-              <MaterialCommunityIcons size={48} name ={weatherConditions[weather].icon} color ={'#fff'} />
-              <Text style={styles.tempText}>{temperature}˚</Text>
-            </View>
-            <View style = {styles.bodyContainer}>
-              <Text style = {styles.title}> {weatherConditions[weather].title}</Text>
-              <Text style={styles.subtitle}>{weatherConditions[weather].subtitle}</Text>
-            </View>
+                          <MaterialCommunityIcons size={48} name ={weatherConditions[weather].icon} color ={'#fff'} />
+                          <Text style={styles.tempText}>{temperature}˚</Text>
+                        </View>
+                        <View style = {styles.bodyContainer}>
+                          <Text style = {styles.title}> {title}</Text>
+                          <Text style={styles.subtitle}>{weatherConditions[weather].subtitle}</Text>
+                        </View>
           </View>
   )
 }
