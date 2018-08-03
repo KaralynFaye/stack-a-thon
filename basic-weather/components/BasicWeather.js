@@ -14,7 +14,7 @@ const Weather = ({weather, temperature, title, willRain}) => {
                           <Text style={styles.tempText}>{temperature}˚</Text>
                         </View>
                         <View style = {styles.bodyContainer}>
-                          {willRain ? <Text style={styles.subtitle}>It's going to Rain Today!</Text>:<Text style={styles.subtitle}>No Rain Today!</Text>}
+                          {willRain ? <Text style={styles.title}>It's going to Rain Today!</Text>:<Text style={styles.title}>No Rain Today!</Text>}
                           <Text style={styles.subtitle}>{weatherConditions[weather].subtitle}</Text>
                         </View>
           </View>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     flex:1,
     alignItems:'center',
     justifyContent:'center',
-    marginTop: 50
+    marginTop: 125
   },
   tempText: {
     fontSize: 48,
