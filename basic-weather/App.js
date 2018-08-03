@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Animated, Linking } from 'react-native';
+import { StyleSheet, Text, View, Animated } from 'react-native';
 import {Dark_sky_key} from './secrets'
 import Weather from './components/BasicWeather'
 
@@ -25,6 +25,17 @@ export default class App extends React.Component {
         })
       })
   }
+ // start: how many hours from now to start looking,
+ // hours: how many hours to check,
+ // data: hourly data from darkSky
+ // chance: percent chance of rain that equals true
+  checkForRain(start = 0, hours = 12, data = this.state.hourly, chance = .4){
+    for (let i = 0; i<hours; i++) {
+      if (data[i].precipProbability >= chance && data[i].precipType === 'rain')
+        return true
+    }
+    return false
+  }
 
   async fetchWeather(lat, lon) {
     fetch(
@@ -43,7 +54,7 @@ render() {
     return (
       <View style={styles.container}>
         {isLoading ? <Text style={styles.loading}> Data is Loading </Text> : (
-            <Weather weather='rain' temperature={temperature} title = {title} />
+            <Weather weather={weatherCondition} temperature={temperature} title = {title} willRain= {this.checkForRain()} />
         )}
       </View>
     );

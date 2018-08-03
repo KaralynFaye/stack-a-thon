@@ -4,17 +4,17 @@ import {MaterialCommunityIcons} from '@expo/vector-icons' ;
 import PropTypes from 'prop-types';
 import { weatherConditions } from '../stylings/weatherConditions'
 
-const Weather = ({weather, temperature, title}) => {
-  console.log('I am rendering)')
+const Weather = ({weather, temperature, title, willRain}) => {
   return (
-          <View style = {[styles.weatherContainer], {backgroundColor: weatherConditions[weather].color}}>
-            <Text style = {styles.headerContainer}>{weather}</Text>
+          <View style = {[styles.weatherContainer, {backgroundColor: weatherConditions[weather].color}]}>
+
             <View style = {styles.headerContainer} >
-                          <MaterialCommunityIcons size={48} name ={weatherConditions[weather].icon} color ={'#fff'} />
+                          <MaterialCommunityIcons size={120} name ={weatherConditions[weather].icon} color ={'#fff'} />
+                          <Text style = {styles.title}>{title}</Text>
                           <Text style={styles.tempText}>{temperature}˚</Text>
                         </View>
                         <View style = {styles.bodyContainer}>
-                          <Text style = {styles.title}> {title}</Text>
+                          {willRain ? <Text style={styles.subtitle}>It's going to Rain Today!</Text>:<Text style={styles.subtitle}>No Rain Today!</Text>}
                           <Text style={styles.subtitle}>{weatherConditions[weather].subtitle}</Text>
                         </View>
           </View>
@@ -29,12 +29,12 @@ Weather.propTypes = {
 const styles = StyleSheet.create({
   weatherContainer: {
     flex: 1,
-    backgroundColor: 'orange'
   },
   headerContainer: {
     flex:1,
     alignItems:'center',
-    justifyContent:'center'
+    justifyContent:'center',
+    marginTop: 50
   },
   tempText: {
     fontSize: 48,
