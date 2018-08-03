@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 import { weatherConditions } from '../stylings/weatherConditions'
 
 const Weather = ({weather, temperature, title}) => {
+  console.log('I am rendering)')
   return (
-          <View style = {[styles.weatherContainer], {backgroundColor:weatherConditions[weather].color}}>
-            <Text style = {styles.headerContainer}>{weather}{temperature}</Text>
+          <View style = {[styles.weatherContainer], {backgroundColor: weatherConditions[weather].color}}>
+            <Text style = {styles.headerContainer}>{weather}</Text>
             <View style = {styles.headerContainer} >
                           <MaterialCommunityIcons size={48} name ={weatherConditions[weather].icon} color ={'#fff'} />
                           <Text style={styles.tempText}>{temperature}˚</Text>

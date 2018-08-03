@@ -16,7 +16,6 @@ export default class App extends React.Component {
   componentDidMount(){
     navigator.geolocation.getCurrentPosition(
       position => {
-        console.log(position.coords)
         this.fetchWeather(position.coords.latitude, position.coords.longitude)
       },
       error => {
@@ -54,7 +53,6 @@ render() {
 const styles = StyleSheet.create({
   container : {
     flex: 1,
-    backgroundColor: '#fff',
   },
   loading: {
     flex:1,
