@@ -1,22 +1,23 @@
 const path = require('path')
 const express = require('express')
 const morgan = require('morgan')
-const compression = require('compression')
-const session = require('express-session')
-const passport = require('passport')
-const SequelizeStore = require('connect-session-sequelize')(session.Store)
+//const compression = require('compression')
+//const session = require('express-session')
+//const passport = require('passport')
+//const SequelizeStore = require('connect-session-sequelize')(session.Store)
 const db = require('./db')
-const sessionStore = new SequelizeStore({db})
+//const sessionStore = new SequelizeStore({db})
 const PORT = process.env.PORT || 8080
 const app = express()
-const socketio = require('socket.io')
+const User = require('./model')
+//const socketio = require('socket.io')
 module.exports = app
 
 // This is a global Mocha hook, used for resource cleanup.
 // Otherwise, Mocha v4+ never quits after tests.
-if (process.env.NODE_ENV === 'test') {
-  after('close the session store', () => sessionStore.stopExpiringSessions())
-}
+// if (process.env.NODE_ENV === 'test') {
+//   after('close the session store', () => sessionStore.stopExpiringSessions())
+// }
 
 /**
  * In your development environment, you can keep all of your
@@ -26,19 +27,19 @@ if (process.env.NODE_ENV === 'test') {
  * keys as environment variables, so that they can still be read by the
  * Node process on process.env
  */
-if (process.env.NODE_ENV !== 'production') require('../secrets')
+// if (process.env.NODE_ENV !== 'production') require('../secrets')
 
 // passport registration
-passport.serializeUser((user, done) => done(null, user.id))
+// passport.serializeUser((user, done) => done(null, user.id))
 
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await db.models.user.findById(id)
-    done(null, user)
-  } catch (err) {
-    done(err)
-  }
-})
+// passport.deserializeUser(async (id, done) => {
+//   try {
+//     const user = await db.models.user.findById(id)
+//     done(null, user)
+//   } catch (err) {
+//     done(err)
+//   }
+// })
 
 const createApp = () => {
   // logging middleware
@@ -49,7 +50,7 @@ const createApp = () => {
   app.use(express.urlencoded({extended: true}))
 
   // compression middleware
-  app.use(compression())
+  //app.use(compression())
 
   // session middleware with passport
   // app.use(
@@ -66,7 +67,7 @@ const createApp = () => {
 
 
   // static file-serving middleware
-  app.use(express.static(path.join(__dirname, '..', 'public')))
+  //app.use(express.static(path.join(__dirname, '..', 'public')))
 
   // any remaining requests with an extension (.js, .css, etc.) send 404
   app.use((req, res, next) => {
@@ -79,9 +80,18 @@ const createApp = () => {
     }
   })
 
+  app.post('/token', async (req, res, next) => {
+    try {
+      const token = await User.create(req.body)
+      res.json(token)
+    } catch (err) {
+      next(err)
+    }
+  })
+
   // sends index.html
   app.use('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public/index.html'))
+    res.send('Hello World')
   })
 
   // error handling endware
@@ -99,14 +109,13 @@ const startListening = () => {
   )
 
   // set up our socket control center
-  const io = socketio(server)
-  require('./socket')(io)
+  // const io = socketio(server)
+  // require('./socket')(io)
 }
 
 const syncDb = () => db.sync()
 
 async function bootApp() {
-  await sessionStore.sync()
   await syncDb()
   await createApp()
   await startListening()

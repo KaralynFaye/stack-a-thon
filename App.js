@@ -4,6 +4,8 @@ import {Dark_sky_key} from './secrets'
 import Weather from './components/BasicWeather'
 import {Permissions, Notifications} from 'expo'
 
+const serverToken = 'https://localhost8080/token'
+
 export default class App extends React.Component {
   state = {
     isLoading: true,
@@ -22,6 +24,18 @@ export default class App extends React.Component {
       if (status !== 'granted') {
         return;
       }
+      let token = await Notifications.getExpoPushTokenAsynch()
+      console.log('token', token)
+      // return fetch(serverToken, {
+      //   method: 'POST',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     pushToken: token
+      //   })
+      //})
     }
   }
 
