@@ -10,7 +10,7 @@ var notification = {
   },
   body: JSON.stringify({
   "to" : "ExponentPushToken[GYAFRaNxhPsASqDq71pH2O]",
-  "title": "It's going to rain tomorrow",
+  "title": "It's going to rain today",
   "body":"Bring an Umbrella"
 
   }),
@@ -39,7 +39,7 @@ var job = clock.scheduleJob(rule, async () => {
     console.log("Damn", err)
   })
   }
-  console.log("it's apparently not raining")
+
   } catch (err) {
   console.log('not working', err)
   }
