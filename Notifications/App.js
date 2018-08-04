@@ -26,9 +26,10 @@ export default class App extends React.Component {
 
   async registerForPushNotifications() {
     const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-
+    console.log(status)
     if (status !== 'granted') {
       const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      console.log('here')
       if (status !== 'granted') {
         return;
       }
